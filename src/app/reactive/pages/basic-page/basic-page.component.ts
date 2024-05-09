@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, ValidationErrors, Validators } from '@angular/forms';
+import { ValidatorsService } from '../../../shared/services/validators.service';
 
 // Constante con el valor que va a tener las propiedades 'inStorage' y 'price' luego de reiniciarlas
 const INITIAL_VALUE: number = 0;
@@ -23,7 +24,9 @@ export class BasicPageComponent implements OnInit {
     inStorage: [INITIAL_VALUE, [ Validators.required, Validators.min(0)] ]
   });
 
-  constructor( private formBuilder: FormBuilder ) {}
+  constructor( private formBuilder: FormBuilder,
+    private validatorService: ValidatorsService
+   ) {}
 
   ngOnInit(): void {
     // Cuando inicia, cargamos el formulario con la constante rtx5090
@@ -32,8 +35,7 @@ export class BasicPageComponent implements OnInit {
 
   // Método que devuelve true si el campo que recibe tiene errores o fue tocado.
   isInvalidField( field: string ): boolean | null {
-    return this.myForm.controls[field].errors &&
-      this.myForm.controls[field].touched;
+    return this.validatorService.isInvalidField( this.myForm, field );
   }
 
   // Método que devuelve el mensaje de error del campo que recibe.
